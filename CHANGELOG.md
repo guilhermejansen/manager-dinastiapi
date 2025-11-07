@@ -5,6 +5,12 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## 1.0.0 (2025-11-07)
+
+### ✨ Novas Funcionalidades
+
+* **update:** init DinastiAPI (01e4cbca31b0e2cde91a7c2ceff90612026b26c7)
+
 ## [1.5.1](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.5.0...v1.5.1) (2025-11-07)
 
 ### 🐛 Correções de Bugs
