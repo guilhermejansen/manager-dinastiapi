@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Campaign {
+  id                    String             @id @default(cuid())
+  name                  String
+  description           String?
+  type                  CampaignType
+  status                CampaignStatus     @default(DRAFT)
+  workflow              Json
+  scheduledAt           DateTime?
+  cronExpression        String?
+  timezone              String?
+  enableFallback        Boolean            @default(true)
+  randomizeInstances    Boolean            @default(true)
+  maxRetriesPerInstance Int                @default(3)
+  userId                String
+  userRole              UserRole           @default(USER)
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  startedAt             DateTime?
+  completedAt           DateTime?
+  instances             CampaignInstance[]
+  jobs                  CampaignJob[]
+  messages              CampaignMessage[]
+  stats                 CampaignStats?
+  contactLists          ContactList[]      @relation("CampaignToContactList")
+
+  @@index([userId])
+  @@index([status])
+  @@index([type])
+  @@index([scheduledAt])
+}
+
+model CampaignInstance {
+  id             String    @id @default(cuid())
+  campaignId     String
+  instanceId     String
+  token          String
+  name           String?
+  priority       Int       @default(0)
+  maxRetries     Int       @default(3)
+  fallbackOrder  Int?
+  messagesSent   Int       @default(0)
+  messagesFailed Int       @default(0)
+  lastUsedAt     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  campaign       Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, instanceId])
+  @@index([campaignId])
+}
+
+model ContactList {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  source      ContactSource
+  type        ContactType   @default(INDIVIDUAL)
+  importedAt  DateTime?
+  importedBy  String?
+  fileName    String?
+  apiEndpoint String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  contacts    Contact[]
+  campaigns   Campaign[]    @relation("CampaignToContactList")
+
+  @@index([source])
+  @@index([type])
+}
+
+model Contact {
+  id            String      @id @default(cuid())
+  contactListId String
+  jid           String
+  name          String?
+  pushName      String?
+  type          ContactType @default(INDIVIDUAL)
+  customFields  Json?
+  isValid       Boolean     @default(true)
+  lastError     String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  contactList   ContactList @relation(fields: [contactListId], references: [id], onDelete: Cascade)
+
+  @@unique([contactListId, jid])
+  @@index([contactListId])
+  @@index([jid])
+  @@index([type])
+}
+
+model CampaignMessage {
+  id         String      @id @default(cuid())
+  campaignId String
+  nodeId     String
+  order      Int
+  type       MessageType
+  content    Json
+  delayMs    Int?        @default(0)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  campaign   Campaign    @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, nodeId])
+  @@index([campaignId])
+}
+
+model CampaignJob {
+  id          String    @id @default(cuid())
+  bullJobId   String    @unique
+  campaignId  String
+  contactJid  String
+  contactName String?
+  instanceId  String
+  status      JobStatus @default(PENDING)
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(12)
+  lastError   String?
+  sentAt      DateTime?
+  completedAt DateTime?
+  queuedAt    DateTime  @default(now())
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([status])
+  @@index([bullJobId])
+}
+
+model CampaignStats {
+  id              String    @id @default(cuid())
+  campaignId      String    @unique
+  totalContacts   Int       @default(0)
+  totalMessages   Int       @default(0)
+  messagesSent    Int       @default(0)
+  messagesFailed  Int       @default(0)
+  messagesPending Int       @default(0)
+  avgDeliveryTime Int?
+  successRate     Float?
+  startedAt       DateTime?
+  lastMessageAt   DateTime?
+  estimatedEndAt  DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  campaign        Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+enum CampaignType {
+  SINGLE
+  SCHEDULED
+  RECURRING
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  RUNNING
+  PAUSED
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum ContactSource {
+  MANUAL
+  CSV
+  EXCEL
+  API
+}
+
+enum ContactType {
+  INDIVIDUAL
+  LID
+  GROUP
+  NEWSLETTER
+  BROADCAST
+  BOT
+  HOSTED
+  HOSTED_LID
+  MESSENGER
+  INTEROP
+  STATUS
+}
+
+enum MessageType {
+  TEXT
+  MEDIA
+  TEMPLATE
+  INTERACTIVE
+  LOCATION
+  CONTACT
+  REACTION
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  RETRYING
+  CANCELLED
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
