@@ -363,7 +363,7 @@ Todas as contribuições são valorizadas e serão reconhecidas:
 
 ## 📞 Precisa de Ajuda?
 
-- 📧 Email: suporte@setupautomatizado.com.br
+- 📧 Email: suporte@dinastiapi.com
 - 💬 [GitHub Discussions](../../discussions)
 - 🐛 [Reportar Bug](../../issues/new?template=bug_report.yml)
 - ✨ [Sugerir Feature](../../issues/new?template=feature_request.yml)

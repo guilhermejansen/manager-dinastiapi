@@ -196,7 +196,7 @@ export const pricingPlans: PricingPlan[] = [
     installations: "1 instalação por IP",
     description:
       "1 licença/1 IP para instalar localmente ou em cloud privada, com API completa e instâncias ilimitadas.",
-    link: "https://go.hotmart.com/S101068222H?off=24s9oau4",
+    link: "https://clkdmg.site/subscribe/dinastiapi-mensal?sck=grupos-wpp",
   },
   {
     tier: "Professional",
@@ -204,7 +204,7 @@ export const pricingPlans: PricingPlan[] = [
     installations: "1 instalação por IP",
     description:
       "1 licença/1 IP com cobrança anual, mantendo operação self-hosted na infraestrutura do cliente.",
-    link: "https://go.hotmart.com/S101068222H?off=ml91nraz",
+    link: "https://clkdmg.site/subscribe/dinastiapi-anual?sck=grupos-wpp",
   },
   {
     tier: "Enterprise",
@@ -212,7 +212,7 @@ export const pricingPlans: PricingPlan[] = [
     installations: "Até 2 instalações por IP",
     description:
       "Até 2 licenças/IP para ambientes redundantes + botões interativos, carousels e catálogos com suporte dedicado.",
-    link: "https://go.hotmart.com/S101068222H?off=pez6mwnh",
+    link: "https://clkdmg.site/subscribe/api-premium-mensal?sck=grupos-wpp",
   },
   {
     tier: "Enterprise",
@@ -220,6 +220,6 @@ export const pricingPlans: PricingPlan[] = [
     installations: "Até 2 instalações por IP",
     description:
       "Até 2 licenças/IP com faturamento anual, pensado para clusters Swarm, escalabilidade e jornadas globais.",
-    link: "https://go.hotmart.com/S101068222H?off=p1q64goj",
+    link: "https://clkdmg.site/subscribe/api-premium-anual?sck=grupos-wpp",
   },
 ]

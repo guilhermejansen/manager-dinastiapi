@@ -490,7 +490,7 @@ const PricingCard = ({
         </Button>
       </Link>
       <p className="text-xs text-muted-foreground">
-        Pagamento seguro via Hotmart. Ativação imediata após a assinatura.
+        Pagamento seguro via Guru. Ativação imediata após a assinatura.
       </p>
     </div>
   </motion.div>
@@ -947,7 +947,7 @@ export const LandingPage = () => {
                 Campanhas fluxos nativos
               </div>
               <Link
-                href="https://github.com/guilhermejansen/use-dinastiapi"
+                href="https://github.com/DinastIA-UK/use-dinastiapi/"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-border/40 bg-background/70 px-3 py-1 transition hover:-translate-y-0.5"
@@ -965,7 +965,7 @@ export const LandingPage = () => {
                 Swagger API
               </Link>
               <Link
-                href="https://www.postman.com/setupautomatizado/setup-automatizado-s-workspace"
+                href="https://www.postman.com/dinastiapi/dinastiapi-s-workspace"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-border/40 bg-background/70 px-3 py-1 transition hover:-translate-y-0.5"
