@@ -5,6 +5,13 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [1.0.1](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.0...v1.0.1) (2025-11-08)
+
+### 🐛 Correções de Bugs
+
+* license (f030abd104a18baba169326881812ae08e9a658f)
+* links landpage (68f4c7464d6d2215d7014272f30094f6803c4d99)
+
 ## 1.0.0 (2025-11-07)
 
 ### ✨ Novas Funcionalidades
