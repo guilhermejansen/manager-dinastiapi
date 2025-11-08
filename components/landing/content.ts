@@ -209,17 +209,17 @@ export const pricingPlans: PricingPlan[] = [
   {
     tier: "Enterprise",
     billing: "Mensal",
-    installations: "Até 2 instalações por IP",
+    installations: "1 instalações por IP",
     description:
-      "Até 2 licenças/IP para ambientes redundantes + botões interativos, carousels e catálogos com suporte dedicado.",
+      "1 licenças/IP para ambientes redundantes + botões interativos, carousels e catálogos com suporte dedicado.",
     link: "https://clkdmg.site/subscribe/api-premium-mensal?sck=grupos-wpp",
   },
   {
     tier: "Enterprise",
     billing: "Anual",
-    installations: "Até 2 instalações por IP",
+    installations: "1 instalações por IP",
     description:
-      "Até 2 licenças/IP com faturamento anual, pensado para clusters Swarm, escalabilidade e jornadas globais.",
+      "1 licenças/IP com faturamento anual, pensado para clusters Swarm, escalabilidade e jornadas globais.",
     link: "https://clkdmg.site/subscribe/api-premium-anual?sck=grupos-wpp",
   },
 ]
