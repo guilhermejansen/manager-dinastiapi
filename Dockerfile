@@ -5,31 +5,7 @@
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# Stage 1: Dependencies
-# Install only production dependencies for smaller final image
-# ------------------------------------------------------------------------------
-FROM node:20-alpine AS deps
-
-# Harden npm network settings to reduce transient registry failures
-ENV NPM_CONFIG_FETCH_RETRIES=5 \
-    NPM_CONFIG_FETCH_RETRY_MINTIMEOUT=20000 \
-    NPM_CONFIG_FETCH_RETRY_MAXTIMEOUT=120000 \
-    NPM_CONFIG_REGISTRY=https://registry.npmjs.org/
-
-# Install libc6-compat for compatibility
-RUN apk add --no-cache libc6-compat
-
-WORKDIR /app
-
-# Copy package files
-COPY package.json package-lock.json ./
-
-# Install production dependencies only
-RUN npm ci --only=production --ignore-scripts && \
-    npm cache clean --force
-
-# ------------------------------------------------------------------------------
-# Stage 2: Builder
+# Stage 1: Builder
 # Build the application with all dependencies
 # ------------------------------------------------------------------------------
 FROM node:20-alpine AS builder
@@ -40,23 +16,23 @@ ENV NPM_CONFIG_FETCH_RETRIES=5 \
     NPM_CONFIG_FETCH_RETRY_MAXTIMEOUT=120000 \
     NPM_CONFIG_REGISTRY=https://registry.npmjs.org/
 
+# Prisma environment variables for multi-arch builds
+ENV PRISMA_CLI_BINARY_TARGETS=native
+
 # Install build dependencies
-RUN apk add --no-cache libc6-compat python3 make g++
+RUN apk add --no-cache libc6-compat python3 make g++ openssl
 
 WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json ./
 
-# Install all dependencies (including devDependencies)
-RUN npm ci --ignore-scripts && \
-    npm cache clean --force
-
-# Copy Prisma schema and migrations
+# Copy Prisma schema and migrations first (needed for postinstall)
 COPY prisma ./prisma/
 
-# Generate Prisma Client
-RUN npx prisma generate
+# Install all dependencies (Prisma Client will be generated via postinstall)
+RUN npm ci && \
+    npm cache clean --force
 
 # Copy source code
 COPY . .
@@ -69,8 +45,11 @@ RUN npm run build
 # Build worker bundle (postbuild runs automatically, but ensure artifacts exist)
 RUN test -d dist/workers
 
+# Prune devDependencies to reduce final image size
+RUN npm prune --omit=dev
+
 # ------------------------------------------------------------------------------
-# Stage 3: Runner
+# Stage 2: Runner
 # Final production image with minimal footprint
 # ------------------------------------------------------------------------------
 FROM node:20-alpine AS runner
@@ -97,8 +76,8 @@ ENV TZ=America/Sao_Paulo
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nodejs
 
-# Copy production node_modules from deps stage
-COPY --from=deps --chown=nodejs:nodejs /app/node_modules ./node_modules
+# Copy production node_modules from builder stage
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
 
 # Copy Prisma files (needed for migrations at runtime)
 COPY --from=builder --chown=nodejs:nodejs /app/prisma ./prisma
