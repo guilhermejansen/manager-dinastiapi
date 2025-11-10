@@ -5,6 +5,12 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [1.0.4](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.3...v1.0.4) (2025-11-10)
+
+### 🐛 Correções de Bugs
+
+* **docker:** correct dockerfile build actions (2446e2bb9097e7744e418e86987e4c8acda8ee1e)
+
 ## [1.0.3](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.2...v1.0.3) (2025-11-10)
 
 ### 🐛 Correções de Bugs
