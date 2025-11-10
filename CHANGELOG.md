@@ -5,6 +5,12 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [1.0.3](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.2...v1.0.3) (2025-11-10)
+
+### 🐛 Correções de Bugs
+
+* **docker:** corrige falha de build multi-arquitetura no ARM64 (ae470250d8cab93fc9b4848dd263a1236c814943)
+
 ## [1.0.2](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.1...v1.0.2) (2025-11-10)
 
 ### 🐛 Correções de Bugs
