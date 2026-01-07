@@ -331,11 +331,14 @@ WORKDIR /app
 # Copy package files and lockfile
 COPY package.json bun.lock* ./
 
-# Copy Prisma schema (required for postinstall prisma generate)
+# Copy Prisma schema (required for prisma generate)
 COPY prisma ./prisma/
 
 # Install production dependencies only
-RUN bun install --frozen-lockfile --production
+# IMPORTANTE: Usar --ignore-scripts para evitar falha do postinstall em Docker
+# e executar prisma generate manualmente após o install
+RUN bun install --frozen-lockfile --production --ignore-scripts && \
+    bunx prisma generate
 
 # ------------------------------------------------------------------------------
 # Stage 2: Builder
@@ -351,14 +354,14 @@ WORKDIR /app
 # Copy package files and lockfile
 COPY package.json bun.lock* ./
 
-# Install all dependencies (including devDependencies)
-RUN bun install --frozen-lockfile
-
-# Copy Prisma schema and migrations
+# Copy Prisma schema (required for prisma generate)
 COPY prisma ./prisma/
 
-# Generate Prisma Client
-RUN bunx --bun prisma generate
+# Install all dependencies (including devDependencies)
+# IMPORTANTE: Usar --ignore-scripts para evitar falha do postinstall em Docker
+# e executar prisma generate manualmente após o install
+RUN bun install --frozen-lockfile --ignore-scripts && \
+    bunx prisma generate
 
 # Copy source code
 COPY . .
@@ -1037,6 +1040,26 @@ Remover imports de dotenv - Bun carrega .env automaticamente.
 
 Remover tsx - Bun executa TypeScript nativamente.
 
+### Erro: "postinstall script exited with 1" no Docker
+
+O script postinstall que executa `prisma generate` pode falhar no Docker por questões de timing ou ambiente. Solução:
+
+```dockerfile
+# Usar --ignore-scripts e executar prisma generate manualmente
+RUN bun install --frozen-lockfile --ignore-scripts && \
+    bunx prisma generate
+```
+
+### Erro: "prisma/schema.prisma: file not found" no Docker
+
+Copiar a pasta prisma ANTES de executar `bun install`:
+
+```dockerfile
+COPY prisma ./prisma/
+RUN bun install --frozen-lockfile --ignore-scripts && \
+    bunx prisma generate
+```
+
 ### Build muito lento ou travando
 
 Verificar memória disponível. Next.js build requer ~4GB RAM mínimo.
@@ -1106,5 +1129,9 @@ project/
 ---
 
 **Autor**: Claude Code Agent  
-**Versão**: 1.0  
-**Última atualização**: Janeiro 2026
+**Versão**: 1.1  
+**Última atualização**: 07 Janeiro 2026
+
+### Changelog
+- **v1.1**: Adicionada correção `--ignore-scripts` no Dockerfile para resolver falhas de postinstall
+- **v1.0**: Versão inicial do guia de migração
