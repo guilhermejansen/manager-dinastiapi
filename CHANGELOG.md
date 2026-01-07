@@ -5,6 +5,32 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [1.0.5](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.4...v1.0.5) (2026-01-07)
+
+### ⚠ BREAKING CHANGES
+
+* **bun:** Project now requires Bun runtime instead of Node.js
+* **excel:** xlsx library replaced with exceljs
+
+### 🐛 Correções de Bugs
+
+* **ci:** add node.js 22 for semantic-release compatibility (af256e766bb5554b2c46cbf0fc6201a18d59731a)
+* **docker:** copy prisma schema before bun install in deps stage (5f8accbb80483711053780f3bf4e137d895f7273)
+* **ui:** resolve TypeScript type errors (2c6e92deb9b3d8cf8096e703f0a78943d1c77d38)
+
+### 📚 Documentação
+
+* add comprehensive npm to bun migration guide (c86724b64603cfd12b2d5cf1481eea7fbcdefc5f)
+* update migration guide with ci and docker fixes (ac4ba08e2959f844325557393af8dcb8f5af4055)
+
+### ♻️ Refatorações
+
+* **excel:** migrate from xlsx to exceljs (bdff39501442442e4748603da5f1d1d304f3e618)
+
+### 📦 Build
+
+* **bun:** migrate from npm to bun runtime (6df52810424d368712140c5ba84adb792fe9ac78)
+
 ## [1.0.4](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.3...v1.0.4) (2025-11-10)
 
 ### 🐛 Correções de Bugs
