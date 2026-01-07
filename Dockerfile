@@ -38,14 +38,11 @@ WORKDIR /app
 # Copy package files and lockfile
 COPY package.json bun.lock* ./
 
-# Install all dependencies (including devDependencies)
-RUN bun install --frozen-lockfile
-
-# Copy Prisma schema and migrations
+# Copy Prisma schema (required for postinstall prisma generate)
 COPY prisma ./prisma/
 
-# Generate Prisma Client
-RUN bunx --bun prisma generate
+# Install all dependencies (including devDependencies)
+RUN bun install --frozen-lockfile
 
 # Copy source code
 COPY . .
