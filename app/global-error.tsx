@@ -1,108 +1,139 @@
 'use client'
 
-import { useEffect } from 'react'
-import { AlertCircle, Home, RefreshCw } from 'lucide-react'
-
 interface GlobalErrorProps {
   error: Error & { digest?: string }
   reset: () => void
 }
 
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
-  useEffect(() => {
-    console.error('Root Layout Error:', {
-      message: error.message,
-      digest: error.digest,
-      stack: error.stack,
-      timestamp: new Date().toISOString(),
-    })
-  }, [error])
-
   return (
     <html lang="pt-BR">
       <body>
-        <div className="flex min-h-screen items-center justify-center p-4 bg-background">
-          <div className="w-full max-w-2xl rounded-lg border border-destructive/50 bg-card p-6 shadow-lg">
-            <div className="space-y-6">
-              {/* Header */}
-              <div className="flex items-center gap-3">
-                <div className="rounded-full bg-destructive/10 p-3 text-destructive">
-                  <AlertCircle className="h-6 w-6" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold">Erro Crítico da Aplicação</h1>
-                  <p className="text-muted-foreground mt-1">
-                    Ocorreu um erro crítico no sistema.
-                  </p>
-                </div>
-              </div>
-
-              {/* Error Message */}
-              <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4">
-                <div className="flex items-start gap-2">
-                  <AlertCircle className="h-4 w-4 text-destructive mt-0.5" />
-                  <p className="font-mono text-sm">{error.message}</p>
-                </div>
-              </div>
-
-              {/* Environment Info */}
-              <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
-                <h3 className="font-semibold text-sm text-muted-foreground">
-                  Informações do Ambiente:
-                </h3>
-                <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                  <div className="text-muted-foreground">Backend URL:</div>
-                  <div className="font-semibold">
-                    {process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}
-                  </div>
-                  <div className="text-muted-foreground">Environment:</div>
-                  <div className="font-semibold">
-                    {process.env.NODE_ENV || 'development'}
-                  </div>
-                  {error.digest && (
-                    <>
-                      <div className="text-muted-foreground">Error Digest:</div>
-                      <div className="font-semibold">{error.digest}</div>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              {/* Technical Details (Development) */}
-              {process.env.NODE_ENV === 'development' && error.stack && (
-                <details className="rounded-lg border bg-muted/50 p-4">
-                  <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground">
-                    Stack Trace (Dev)
-                  </summary>
-                  <pre className="mt-3 overflow-auto text-xs font-mono text-muted-foreground whitespace-pre-wrap break-words">
-                    {error.stack}
-                  </pre>
-                </details>
-              )}
-
-              {/* Actions */}
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <button
-                  onClick={reset}
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+        <div
+          style={{
+            display: 'flex',
+            minHeight: '100vh',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1rem',
+            backgroundColor: '#0a0a0a',
+            color: '#fafafa',
+            fontFamily: 'system-ui, -apple-system, sans-serif',
+          }}
+        >
+          <div
+            style={{
+              width: '100%',
+              maxWidth: '32rem',
+              borderRadius: '0.5rem',
+              border: '1px solid #7f1d1d',
+              backgroundColor: '#171717',
+              padding: '1.5rem',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div
+                style={{
+                  borderRadius: '9999px',
+                  backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                  padding: '0.75rem',
+                  color: '#dc2626',
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <RefreshCw className="h-4 w-4" />
-                  Tentar Novamente
-                </button>
-                <a
-                  href="/"
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                >
-                  <Home className="h-4 w-4" />
-                  Voltar ao Início
-                </a>
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
               </div>
+              <div>
+                <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: 0 }}>
+                  Erro Crítico
+                </h1>
+                <p style={{ color: '#a3a3a3', marginTop: '0.25rem', fontSize: '0.875rem' }}>
+                  Ocorreu um erro crítico no sistema.
+                </p>
+              </div>
+            </div>
 
-              {/* Help Text */}
-              <p className="text-center text-xs text-muted-foreground pt-2">
-                Este é um erro crítico do sistema. Por favor, recarregue a página ou contate o
-                suporte.
+            <div
+              style={{
+                marginTop: '1rem',
+                padding: '0.75rem',
+                borderRadius: '0.375rem',
+                backgroundColor: 'rgba(220, 38, 38, 0.05)',
+                border: '1px solid rgba(220, 38, 38, 0.2)',
+              }}
+            >
+              <p style={{ fontFamily: 'monospace', fontSize: '0.875rem', margin: 0 }}>
+                {error.message || 'Um erro inesperado ocorreu'}
               </p>
+              {error.digest && (
+                <p
+                  style={{
+                    fontFamily: 'monospace',
+                    fontSize: '0.75rem',
+                    color: '#a3a3a3',
+                    marginTop: '0.5rem',
+                  }}
+                >
+                  Digest: {error.digest}
+                </p>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
+              <button
+                onClick={reset}
+                style={{
+                  flex: 1,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  borderRadius: '0.375rem',
+                  backgroundColor: '#fafafa',
+                  color: '#0a0a0a',
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                Tentar Novamente
+              </button>
+              <a
+                href="/"
+                style={{
+                  flex: 1,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  borderRadius: '0.375rem',
+                  backgroundColor: 'transparent',
+                  color: '#fafafa',
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  border: '1px solid #404040',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                Voltar ao Início
+              </a>
             </div>
           </div>
         </div>
