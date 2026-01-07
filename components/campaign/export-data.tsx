@@ -11,10 +11,10 @@
 
 import { useCallback, useState } from "react"
 
+import ExcelJS from "exceljs"
 import { Download, FileJson, FileSpreadsheet, FileText, Loader2 } from "lucide-react"
 import Papa from "papaparse"
 import { toast } from "sonner"
-import * as XLSX from "xlsx"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -135,13 +135,40 @@ function exportToCSV(data: any, filename: string) {
 /**
  * Converte dados para Excel e faz download
  */
-function exportToExcel(data: any, filename: string) {
+async function exportToExcel(data: any[], filename: string) {
   try {
-    const worksheet = XLSX.utils.json_to_sheet(data)
-    const workbook = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Data")
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet("Data")
 
-    XLSX.writeFile(workbook, `${filename}.xlsx`)
+    // Adicionar headers se houver dados
+    if (data.length > 0) {
+      const headers = Object.keys(data[0])
+      worksheet.columns = headers.map((header) => ({
+        header,
+        key: header,
+        width: 20,
+      }))
+
+      // Adicionar dados
+      data.forEach((row) => {
+        worksheet.addRow(row)
+      })
+    }
+
+    // Gerar buffer e fazer download
+    const buffer = await workbook.xlsx.writeBuffer()
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    })
+    const link = document.createElement("a")
+    const url = URL.createObjectURL(blob)
+
+    link.setAttribute("href", url)
+    link.setAttribute("download", `${filename}.xlsx`)
+    link.style.visibility = "hidden"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
 
     logger.success("Export: Excel file downloaded", null, {
       component: "ExportData",
@@ -223,7 +250,7 @@ export function ExportData({
             exportToCSV(data, timestampedFilename)
             break
           case "excel":
-            exportToExcel(data, timestampedFilename)
+            await exportToExcel(data, timestampedFilename)
             break
           case "json":
             exportToJSON(data, timestampedFilename)

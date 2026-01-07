@@ -8,8 +8,8 @@
  */
 import { NextRequest, NextResponse } from "next/server"
 
+import ExcelJS from "exceljs"
 import Papa from "papaparse"
-import * as XLSX from "xlsx"
 
 import { logger } from "@/lib/logger"
 
@@ -96,13 +96,27 @@ function convertToCSV(data: any[]): string {
 /**
  * Converte dados para Excel buffer
  */
-function convertToExcel(data: any[]): Buffer {
-  const worksheet = XLSX.utils.json_to_sheet(data)
-  const workbook = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Campaigns")
+async function convertToExcel(data: any[]): Promise<Buffer> {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet("Campaigns")
 
-  const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" })
-  return buffer
+  // Adicionar headers se houver dados
+  if (data.length > 0) {
+    const headers = Object.keys(data[0])
+    worksheet.columns = headers.map((header) => ({
+      header,
+      key: header,
+      width: 20,
+    }))
+
+    // Adicionar dados
+    data.forEach((row) => {
+      worksheet.addRow(row)
+    })
+  }
+
+  const arrayBuffer = await workbook.xlsx.writeBuffer()
+  return Buffer.from(arrayBuffer)
 }
 
 // ============================================================================
@@ -149,8 +163,8 @@ export async function GET(request: NextRequest) {
       }
 
       case "excel": {
-        const excel = convertToExcel(data)
-        return new NextResponse(excel as any, {
+        const excel = await convertToExcel(data)
+        return new NextResponse(new Uint8Array(excel), {
           headers: {
             "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "Content-Disposition": `attachment; filename="${filename}.xlsx"`,
@@ -214,8 +228,8 @@ export async function POST(request: NextRequest) {
       }
 
       case "excel": {
-        const excel = convertToExcel(data)
-        return new NextResponse(excel as any, {
+        const excel = await convertToExcel(data)
+        return new NextResponse(new Uint8Array(excel), {
           headers: {
             "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "Content-Disposition": `attachment; filename="${filename}.xlsx"`,

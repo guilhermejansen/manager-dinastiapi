@@ -6,8 +6,8 @@
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 
+import ExcelJS from "exceljs"
 import Papa from "papaparse"
-import * as XLSX from "xlsx"
 
 import { getRole, getToken } from "@/lib/auth"
 import { logger } from "@/lib/logger"
@@ -681,10 +681,12 @@ export async function importContactsExcelAction(
       }
     }
 
-    // Parse Excel
-    const workbook = XLSX.read(fileBuffer, { type: "array" })
-    const sheetName = options.sheetName || workbook.SheetNames[0]
-    const worksheet = workbook.Sheets[sheetName]
+    // Parse Excel with ExcelJS
+    const workbook = new ExcelJS.Workbook()
+    await workbook.xlsx.load(fileBuffer as ArrayBuffer)
+
+    const sheetName = options.sheetName || workbook.worksheets[0]?.name
+    const worksheet = workbook.getWorksheet(sheetName)
 
     if (!worksheet) {
       return {
@@ -693,11 +695,15 @@ export async function importContactsExcelAction(
       }
     }
 
-    // Converter para JSON
-    const data = XLSX.utils.sheet_to_json<Record<string, any>>(worksheet, {
-      header: 1,
-      defval: "",
-    }) as any[][]
+    // Converter para array de arrays
+    const data: any[][] = []
+    worksheet.eachRow({ includeEmpty: false }, (row) => {
+      const rowValues: any[] = []
+      row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+        rowValues[colNumber - 1] = cell.value
+      })
+      data.push(rowValues)
+    })
 
     const startIndex = options.hasHeader ? 1 : 0
     const dataRows = data.slice(startIndex)
