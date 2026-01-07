@@ -18,11 +18,12 @@ WORKDIR /app
 # Copy package files and lockfile
 COPY package.json bun.lock* ./
 
-# Copy Prisma schema (required for postinstall prisma generate)
+# Copy Prisma schema (required for prisma generate)
 COPY prisma ./prisma/
 
-# Install production dependencies only
-RUN bun install --frozen-lockfile --production
+# Install production dependencies (ignore postinstall, run prisma generate manually)
+RUN bun install --frozen-lockfile --production --ignore-scripts && \
+    bunx prisma generate
 
 # ------------------------------------------------------------------------------
 # Stage 2: Builder
@@ -38,11 +39,12 @@ WORKDIR /app
 # Copy package files and lockfile
 COPY package.json bun.lock* ./
 
-# Copy Prisma schema (required for postinstall prisma generate)
+# Copy Prisma schema (required for prisma generate)
 COPY prisma ./prisma/
 
-# Install all dependencies (including devDependencies)
-RUN bun install --frozen-lockfile
+# Install all dependencies (ignore postinstall, run prisma generate manually)
+RUN bun install --frozen-lockfile --ignore-scripts && \
+    bunx prisma generate
 
 # Copy source code
 COPY . .
