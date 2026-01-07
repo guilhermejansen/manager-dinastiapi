@@ -331,6 +331,9 @@ WORKDIR /app
 # Copy package files and lockfile
 COPY package.json bun.lock* ./
 
+# Copy Prisma schema (required for postinstall prisma generate)
+COPY prisma ./prisma/
+
 # Install production dependencies only
 RUN bun install --frozen-lockfile --production
 
@@ -707,6 +710,8 @@ performHealthCheck()
 
 ### 9.1 GitHub Actions - release.yml
 
+> **IMPORTANTE**: semantic-release requer Node.js ^22.14.0 ou >= 24.10.0. Portanto, é necessário configurar TANTO Node.js quanto Bun no workflow.
+
 ```yaml
 name: Release
 
@@ -732,6 +737,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -745,8 +755,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-        run: bunx semantic-release
+        run: npx semantic-release
 ```
+
+> **Nota**: O `bun install` é usado para instalar dependências (mais rápido), mas `npx semantic-release` é usado para execução pois semantic-release requer Node.js 22+.
 
 ### 9.2 docker-build.yml (não precisa alteração)
 
