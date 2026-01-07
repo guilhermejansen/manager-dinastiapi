@@ -5,6 +5,12 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [1.0.6](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.5...v1.0.6) (2026-01-07)
+
+### 🐛 Correções de Bugs
+
+* **docker:** copy prisma schema before install in builder stage (128e257f4def20942860e9f5208c841ef7a13839)
+
 ## [1.0.5](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.4...v1.0.5) (2026-01-07)
 
 ### ⚠ BREAKING CHANGES
