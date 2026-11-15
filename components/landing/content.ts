@@ -303,16 +303,14 @@ export const pricingTiers: PricingTier[] = [
     ],
   },
   {
-    // Limite de instalações não declarado nesta superfície: a fonte comercial
-    // publicada traz valores divergentes (cartão x rodapé) e a definição é do
-    // proprietário. Nenhuma quantidade é assumida aqui.
+    // Quantidade definida pelo proprietário em 15/11/2026: 2 instalações por
+    // assinatura Enterprise ("Premium" na Guru). O License Server emite as duas.
     tier: "Enterprise",
-    installations: "Licença por IP para ambientes redundantes",
+    installations: "Até 2 instalações (IPs) por assinatura",
     summary:
-      "Licenciamento por IP para ambientes redundantes, com suporte dedicado e os recursos interativos do WhatsApp.",
+      "2 licenças/2 IPs para ambientes redundantes, com suporte dedicado e os recursos interativos do WhatsApp.",
     extras: ["Botões interativos, carousels e catálogos nativos", "Suporte dedicado"],
     featured: true,
-    quantityNote: "A quantidade de instalações é confirmada na página de assinatura.",
     offers: [
       {
         billing: "Mensal",
