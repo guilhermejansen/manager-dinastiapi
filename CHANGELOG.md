@@ -5,6 +5,19 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [1.0.8](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.7...v1.0.8) (2026-11-15)
+
+### 🐛 Correções de Bugs
+
+* **campaign:** align placeholder callback with compiler dependencies (1ecc57425148b82accb55449b609e93b31e7eab8)
+* **landing:** declare two Enterprise installations per subscription (e0bdf61c263db64439de6c64e60f9d30217ad710)
+* **landing:** restore readable responsive marketing flow (6c59e641db281be5902e25d16579151f12bf06cc)
+* **ui:** make manager hydration and schedule rendering deterministic (c60da05ba01a2d023e409f7e2092f185f42b93ba)
+
+### 📚 Documentação
+
+* update migration guide with --ignore-scripts fix (be16408779b2221cab020e487c239545a36577c0)
+
 ## [1.0.7](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.6...v1.0.7) (2026-01-07)
 
 ### 🐛 Correções de Bugs
