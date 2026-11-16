@@ -5,6 +5,12 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [1.0.9](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.8...v1.0.9) (2026-11-16)
+
+### 🐛 Correções de Bugs
+
+* **docker:** parse Redis host and port when REDIS_URL carries credentials (6a046068e4122e9bbc345d42bdeced5220786c64)
+
 ## [1.0.8](https://github.com/guilhermejansen/manager-dinastiapi/compare/v1.0.7...v1.0.8) (2026-11-15)
 
 ### 🐛 Correções de Bugs
